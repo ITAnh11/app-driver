@@ -11,7 +11,7 @@ export class JwtAccessStrategy extends PassportStrategy(
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'UbQ7ssdfasdgfh32gsfvvYU',
+      secretOrKey: process.env.JWT_ACCESS_SECRET || 'UbQ7ssdfasdgfh32gsfvvYU',
     });
   }
 
@@ -33,7 +33,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'UbQ7ssdfasdgfh32gsfvvYU',
+      secretOrKey: process.env.JWT_REFRESH_SECRET || 'UbQ7ssdfasdgfh32gsfvvYU',
     });
   }
 

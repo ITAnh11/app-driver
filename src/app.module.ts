@@ -20,17 +20,19 @@ import { ScheduleModule } from './modules/schedule/schedule.module';
 import { F } from 'node_modules/@faker-js/faker/dist/airline-DF6RqYmq';
 import { FixedTripRequestModule } from './modules/fixed-trip-request/fixed-trip-request.module';
 import { ProfileModule } from './modules/profile/profile.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/appdriver'),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost', // hoặc host của bạn
-      port: 5432,
-      username: 'postgres', // thay bằng user của bạn
-      password: '0977980400', // thay bằng password của bạn
-      database: 'appdriver', // thay bằng tên database của bạn
+      host: process.env.DATABASE_HOST, // hoặc host của bạn
+      port: parseInt(process.env.DATABASE_PORT || ''),
+      username: process.env.DATABASE_USER, // thay bằng user của bạn
+      password: process.env.DATABASE_PASSWORD, // thay bằng password của bạn
+      database: process.env.DATABASE_NAME, // thay bằng tên database của bạn
       autoLoadEntities: true,
             ssl:
         process.env.DATABASE_SSL === 'true'
@@ -43,14 +45,14 @@ import { ProfileModule } from './modules/profile/profile.module';
     }),
     MailerModule.forRoot({
       transport: {
-        host: "smtp.gmail.com",
-        port: 465,
+        host: process.env.MAIL_HOST,
+        port: parseInt(process.env.MAIL_PORT || ''),
         secure: true,
         // ignoreTLS: true,
         // secure: true,
         auth: {
-          user: 'daogiangan0504@gmail.com',
-          pass: 'qwevcanfqbplmvgg',
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASSWORD,
         },
       },
       defaults: {
